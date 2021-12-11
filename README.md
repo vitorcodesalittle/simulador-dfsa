@@ -23,6 +23,17 @@ Esse é um simulador para avaliação de desempenho de estimadores DFSA para cad
 - Quantidade total de slots em colisão
 - Tempo médio de execução do estimador
 
+## Slotted Aloha
+Algoritmo de resolução de conflitos para leitura de RFIDs
+
+## FSA (Framed Slotted Aloha)
+1. Leitor manda um comando request para as tags, informando o tamanho do frame
+2. As tags escolhem um frame aleatório para emitir seus dados. Caso a tag dê a sorte de ser a única a ter escolhido um frame, então a leitura dessa tag é bem sucedida e ela não responde nos frames seguintes. Caso duas tags mandem no mesmo frame, então houve uma colisão, e elas terão que repetir o processo no frame seguinte.
+3. Esse processo se repete até todas as tags serem lidas (ou seja, quando não há colisões)
+
+## DFSA (Dynamic Framed Slotted Aloha)
+Parecido com o FSA, mas o tamanho do frame é dinamicamente ajustado por algum estimador do número de tags, o que torna o algoritmos mais eficiente
+
 ## Integrantes
 - Vitor Lopes Maia Albuquerque
 - Daniel Henrique Amorim Correia
