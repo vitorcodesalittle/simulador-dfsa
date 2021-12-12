@@ -1,5 +1,9 @@
 Esse é um simulador para avaliação de desempenho de estimadores DFSA para cadeira de Sistemas de Comunicação
 
+## Todos:
+- [ ] Implementar quadros com potência de 2
+- [ ] Implementar Shoute, Eom-Lee, IV2
+
 ## Easy run:
 ```bash
 # se o executável gerado pelo cmake estiver na raiz do projeto:
