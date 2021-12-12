@@ -14,7 +14,7 @@ Esse é um simulador para avaliação de desempenho de estimadores DFSA para cad
     - `shoute`: Shoute estimator
     - `eom-lee`: Eom Lee estimator
     - `iv2`: Improved ---
-- `out`: path onde será salvo os resultados dos experimentos  
+- `--out`: path onde será salvo os resultados dos experimentos  
 
 ## Gráficos a serem plotados
 > Usar esses [parâmetros de configuração (Seção 3)](http://www.cin.ufpe.br/~pasg/gpublications/AnGo11.pdf)
