@@ -1,5 +1,10 @@
 Esse é um simulador para avaliação de desempenho de estimadores DFSA para cadeira de Sistemas de Comunicação
 
+## Easy run:
+```bash
+# se o executável gerado pelo cmake estiver na raiz do projeto:
+simulador --out plots/out && python plots/main.py plots/out.csv plots/images
+```
 
 ## Parâmetros Configuráveis
 
