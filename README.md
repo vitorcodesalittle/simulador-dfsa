@@ -3,17 +3,18 @@ Esse é um simulador para avaliação de desempenho de estimadores DFSA para cad
 
 ## Parâmetros Configuráveis
 
-- `--initial-tags`: Número de tags da primeira simulação
-- `--increment-tags`: Incremento do número em cada simulação
-- `--max-tags`: Número máximo de tags que serão simuladas
-- `--repetitions`:número de repetições para tirar a média do resultado para uma certa quantidade de etiquetas
-- `--initial-frame`: tamanho do quadro inicial
+- `--initial-tags`: Número de tags da primeira simulação (padrão 100)
+- `--increment-tags`: Incremento do número em cada simulação (padrão 100)
+- `--max-tags`: Número máximo de tags que serão simuladas (padrão 1000)
+- `--repetitions`:número de repetições para tirar a média do resultado para uma certa quantidade de etiquetas (padrão 5)
+- `--initial-frame`: tamanho do quadro inicial (padrão 64)
 - `--no-po2`: se passado, não vai limitar os quadros a serem uma potência de 2
-- `--estimators`: estimadores a serem rodadas. nomes separados por vírgula
+- `--estimators`: estimadores a serem rodadas. nomes separados por vírgula (padrão lb,shoute,eom-lee,iv2)
     - `lb`: Lower Bound estimator
     - `shoute`: Shoute estimator
     - `eom-lee`: Eom Lee estimator
     - `iv2`: Improved ---
+- `out`: path onde será salvo os resultados dos experimentos  
 
 ## Gráficos a serem plotados
 > Usar esses [parâmetros de configuração (Seção 3)](http://www.cin.ufpe.br/~pasg/gpublications/AnGo11.pdf)
