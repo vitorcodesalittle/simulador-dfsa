@@ -11,6 +11,7 @@ using namespace std;
 #define REPETITIONS "--repetitions"
 #define NO_POWERS_2 "--no-po2"
 #define ESTIMATORS "--estimators"
+#define OUTPUT_PATH "--out"
 
 void split(const string &str, char delim, vector<string> &out) {
     size_t start;
@@ -53,6 +54,8 @@ ExperimentConfig ExperimentConfig::parse(int argc, char **argv) {
             config.repetitions = stoi(value);
         } else if (arg == NO_POWERS_2) {
             config.no_power_of_2 = true;
+        } else if (arg == OUTPUT_PATH) {
+            config.output_path = value;
         } else if (arg == ESTIMATORS) {
             vector<string> estimators;
             split(value, ',', estimators);
@@ -71,6 +74,7 @@ std::string ExperimentConfig::to_string() {
     result += "\n  incremet-tags " + std::to_string(this->tag_increment);
     result += "\n  repetitions " + std::to_string(this->repetitions);
     result += "\n  no-power-of-2 = " + std::to_string(this->no_power_of_2);
+    result += "\n  output_path = " + this->output_path;
     result += "\n}";
     return result;
 }
