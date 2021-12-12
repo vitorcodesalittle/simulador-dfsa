@@ -1,11 +1,7 @@
-//
-// Created by vilma on 12/11/21.
-//
-
 #include "Simulador.h"
 
 int random_frame(ull number_of_frames) {
-    return rand() % (number_of_frames+1);
+    return rand() % number_of_frames;
 }
  void Simulator::run(int ntags) {
     int nSuccess = 0;

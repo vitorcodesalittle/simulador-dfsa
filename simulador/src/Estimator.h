@@ -1,7 +1,3 @@
-//
-// Created by vilma on 12/11/21.
-//
-
 #ifndef SIMULADOR_ESTIMATOR_H
 #define SIMULADOR_ESTIMATOR_H
 

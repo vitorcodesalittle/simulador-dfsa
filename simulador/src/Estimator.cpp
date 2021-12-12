@@ -1,9 +1,5 @@
-
 #include <bits/stdc++.h>
 #include "Estimator.h"
-//
-// Created by vilma on 12/11/21.
-//
 
 ull min (ull a, ull b) { return (a < b) ? a : b; }
 

@@ -1,7 +1,3 @@
-//
-// Created by vilma on 12/11/21.
-//
-
 #ifndef SIMULADOR_SIMULADOR_H
 #define SIMULADOR_SIMULADOR_H
 

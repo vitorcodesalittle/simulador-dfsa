@@ -1,8 +1,4 @@
 #include <vector>
-//
-// Created by vilma on 12/11/21.
-//
-
 #ifndef SIMULADOR_CONFIG_H
 #define SIMULADOR_CONFIG_H
 
