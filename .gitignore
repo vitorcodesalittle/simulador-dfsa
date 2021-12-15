@@ -1,3 +1,5 @@
 .idea
 ./
 simulador/cmake-build-debug
+sim
+build/
