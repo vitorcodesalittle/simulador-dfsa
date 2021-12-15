@@ -3,8 +3,7 @@
 #include <bits/stdc++.h>
 #include "Estimator.h"
 
-ull min (ull a, ull b) { return (a < b) ? a : b; }
-
+// Não é usado
 ull Estimator::next_frames(SlottedAlohaInfo &info) {
     return info.colisoes;
 }

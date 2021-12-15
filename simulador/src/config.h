@@ -21,7 +21,7 @@ public:
         max_tags = 1000;
         initial_tags = 100;
         tag_increment = 100;
-        no_power_of_2 = true;
+        no_power_of_2 = false;
         output_path = "results";
         estimators = std::vector<std::string> {"lb", "shoute", "eom-lee", "iv2"};
     }

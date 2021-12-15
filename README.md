@@ -4,7 +4,6 @@ Esse é um simulador para avaliação de desempenho de estimadores DFSA para cad
 - CMake, python3
 
 ## Todos:
-- [ ] Checar implementação do Eom-Lee
 - [ ] Implementar IV2
 
 ## Easy run:
