@@ -36,7 +36,9 @@ class EomLeeEstimator : public Estimator {
     ull next_frames(SlottedAlohaInfo &info) override;
 };
 
-//class IV2Estimator : public Estimator {
-//    ull next_frames(SlottedAlohaInfo &info) override;
-//};
+	class IV2Estimator : public Estimator {
+    ull next_frames(SlottedAlohaInfo &info) override;
+};
+
+
 #endif //SIMULADOR_ESTIMATOR_H

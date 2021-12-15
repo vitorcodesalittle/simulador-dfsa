@@ -32,6 +32,40 @@ ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
     return static_cast<ull>(ceil(gamma * info.colisoes));
 }
 
+ull vogt(SlottedAlohaInfo &info, double s) {
+	// TODO
+	return -1;
+}
+
+double truncate(double num) {
+	return trunc(num);
+}
+
+ull IV2Estimator::next_frames(SlottedAlohaInfo &info) {
+		double sq2 = sqrt(2);
+		double s = 1; // fator multiplicativo
+		if (info.used_frame != info.colisoes) {
+				return vogt(info, s);
+		}
+		double n = 2 * info.used_frame;
+		double a0 = info.used_frame * pow((1 - 1/info.used_frame), n);
+		double a1 = n * pow(1 - 1/info.used_frame, n-1);
+
+		double delta = sq2 * sqrt(a0 * a0 + a1 * a1 + a0 * a1);
+		delta = truncate(s * delta);
+		double delta0 = delta + 1;
+
+		while (delta < delta0) {
+				n += 1;
+				delta0 = delta;
+				a0 =  info.used_frame * pow(1 - 1/info.used_frame, n);
+				a1 =  n * pow(1 - 1/info.used_frame, n-1);
+				delta = sq2 * sqrt(a0 * a0 + a1 * a1 + a0 * a1);
+				delta = truncate(s * delta);
+		}
+		return n - 1;
+}
+
 std::string SlottedAlohaInfo::to_string() {
     std::string result = "";
     result += "Info {";
