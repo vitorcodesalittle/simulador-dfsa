@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
         for (int ntags = c.initial_tags;  ntags <= c.max_tags; ntags += c.tag_increment) {
             Result total{};
             for (int r = 0; r < c.repetitions; r++) {
-                Simulator s = Simulator(c.initial_frame, *e);
+                Simulator s = Simulator(c.initial_frame, *e, !c.no_power_of_2);
                 Result result = s.run(ntags);
                 total += result;
             }
