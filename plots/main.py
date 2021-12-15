@@ -17,6 +17,7 @@ plots_path = args[2]
 df = pd.read_csv(results_path)
 
 def save_and_clf(path):
+    plt.grid(True)
     plt.savefig(path)
     plt.close()
 
@@ -91,7 +92,7 @@ def plot_total_time(df):
     ax = plt.gca()
     ax.legend(list(zip(list_color,list_mak)), list_lab, handler_map={tuple:MarkerHandler()})
     ax.set_xlabel("Número de etiquetas")
-    ax.set_ylabel("Tempo para identificação")
+    ax.set_ylabel("Tempo para identificação (em ns)")
     save_and_clf(os.path.join(plots_path, "total_time.png"))
 
 plot_total_slots(df)

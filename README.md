@@ -1,7 +1,9 @@
 Esse é um simulador para avaliação de desempenho de estimadores DFSA para cadeira de Sistemas de Comunicação
 
+## Requisitos para rodar esse programa:
+- CMake, python3
+
 ## Todos:
-- [ ] Colocar grid nos gráficos
 - [ ] Checar implementação do Eom-Lee
 - [ ] Implementar IV2
 

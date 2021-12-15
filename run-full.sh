@@ -6,7 +6,7 @@ echo 'Running simulator'
 ./sim --out plots/out --repetitions 1000
 cd plots/
 mkdir -p images
-echo 'Generating scripts'
+echo 'Generating plots'
 python main.py out.csv images/
 cd ..
 echo 'Images saved at plots/images'
