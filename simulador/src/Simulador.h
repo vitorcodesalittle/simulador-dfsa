@@ -34,11 +34,12 @@ public:
 
 class Simulator {
 public:
+    bool use_power_of_2;
     ull initial_frame;
     Estimator &estimator;
     ull current_frame;
     std::vector<SlottedAlohaInfo> history;
-    Simulator(ull ifs, Estimator &estimator) : estimator(estimator), initial_frame(ifs) {
+    Simulator(ull ifs, Estimator &estimator, bool use_power_of_2 = false) : estimator(estimator), initial_frame(ifs), use_power_of_2(use_power_of_2) {
         history = std::vector<SlottedAlohaInfo>();
         current_frame = initial_frame;
     }

@@ -14,6 +14,18 @@ std::string Result::to_string() const {
     result += "\n}";
     return result;
 }
+// see https://imgur.com/a/EcFLMCj
+ull get_closest_po2(ull n) {
+    if (n <= 5) return 4;
+    ull next_power = 2;
+    while (next_power < n) {
+        next_power *= 2;
+    }
+    ull last_power = next_power / 2;
+    if (next_power - n <= n - last_power) return next_power;
+    return last_power;
+}
+
  Result Simulator::run(ull ntags) {
     ull nSuccess = 0;
     Result result{};
@@ -47,7 +59,11 @@ std::string Result::to_string() const {
             break;
         }
         nSuccess += success;
-        current_frame = next_frames;
+        if (use_power_of_2) {
+            current_frame = get_closest_po2(next_frames);
+        } else {
+            current_frame = next_frames;
+        }
         frames.clear();
     }
      return result;
