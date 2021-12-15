@@ -21,7 +21,7 @@ public:
     }
     Result(double ts, double tes, double tcs, double tt): total_slots{ts}, total_empty_slots{tes}, total_collision_slots{tcs}, time{tt} {}
     string to_string() const;
-    Result operator += (Result &b) {
+    void operator += (Result &b) {
         total_slots += b.total_slots;
         total_empty_slots += b.total_empty_slots;
         total_collision_slots += b.total_collision_slots;

@@ -1,3 +1,4 @@
+#include<chrono>
 #include<iostream>
 #include "Simulador.h"
 
@@ -33,12 +34,15 @@ std::string Result::to_string() const {
             colisoes += count > 1;
         }
         ull vazios = (current_frame - success - colisoes);
+        auto info = SlottedAlohaInfo(success, colisoes, vazios);
+        history.push_back(info);
+        auto t0 = std::chrono::high_resolution_clock::now();
+        ull next_frames = estimator.next_frames(info);
+        long long ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - t0).count();
         result.total_collision_slots += colisoes;
         result.total_empty_slots += vazios;
         result.total_slots += current_frame;
-        auto info = SlottedAlohaInfo(success, colisoes, vazios);
-        ull next_frames = estimator.next_frames(info);
-        history.push_back(info);
+        result.time += ns;
         if (info.colisoes == 0) {
             break;
         }
