@@ -12,11 +12,9 @@ Estimator* create_estimator(const string &estimatorName) {
     if (estimatorName == "lb") {
         return new LowerBoundEstimator();
     } else if (estimatorName == "shoute")  {
-        cerr << "SHOUTE NOT IMPLEMENTED. CONTINUING" << endl;
-        return NULL;
+        return new ShoutEstimator();
     } else if (estimatorName == "eom-lee") {
-        cerr << "EOM-LEE NOT IMPLEMENTED. CONTINUING" << endl;
-        return NULL;
+        return new EomLeeEstimator();
     } else if (estimatorName == "iv2") {
         cerr << "IV2 NOT IMPLEMENTED. CONTINUING" << endl;
         return NULL;

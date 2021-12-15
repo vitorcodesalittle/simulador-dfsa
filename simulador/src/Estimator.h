@@ -5,13 +5,15 @@ typedef unsigned long long ull;
 
 class SlottedAlohaInfo {
 public:
+    ull used_frame;
     ull sucessos;
     ull colisoes;
     ull vazios;
-    SlottedAlohaInfo(ull sucessos, ull colisoes, ull vazios):
+    SlottedAlohaInfo(ull sucessos, ull colisoes, ull vazios, ull used_frame):
     sucessos {sucessos},
     colisoes { colisoes },
-    vazios {vazios}
+    vazios {vazios},
+    used_frame(used_frame)
     {}
     std::string to_string();
 
@@ -26,4 +28,15 @@ class LowerBoundEstimator: public Estimator {
     ull next_frames(SlottedAlohaInfo &info) override;
 };
 
+class ShoutEstimator: public Estimator {
+    ull next_frames(SlottedAlohaInfo &info) override;
+};
+
+class EomLeeEstimator : public Estimator {
+    ull next_frames(SlottedAlohaInfo &info) override;
+};
+
+//class IV2Estimator : public Estimator {
+//    ull next_frames(SlottedAlohaInfo &info) override;
+//};
 #endif //SIMULADOR_ESTIMATOR_H

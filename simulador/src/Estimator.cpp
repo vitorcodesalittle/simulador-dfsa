@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits.h>
 #include <bits/stdc++.h>
 #include "Estimator.h"
 
@@ -8,6 +10,32 @@ ull Estimator::next_frames(SlottedAlohaInfo &info) {
 }
 ull LowerBoundEstimator::next_frames(SlottedAlohaInfo &info) {
     return min(info.colisoes * 2, 256);
+}
+
+ull ShoutEstimator::next_frames(SlottedAlohaInfo &info) {
+    return static_cast<ull>(ceil(2.39 * info.colisoes));
+}
+
+double abs(double k) {
+    if (k < 0) return - k;
+    return k;
+}
+
+ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
+    double threshold = 0.5;
+    double L = static_cast<double>(info.used_frame);
+    double gamma_k, beta_k, gamma = 2, beta = std::numeric_limits<double>::max();
+    do {
+        gamma_k = gamma; beta_k = beta;
+        beta = L / ((gamma_k * info.colisoes) + info.sucessos);
+        std::cout << "exp definido ? " << exp(-1.0/beta_k) << std::endl;
+        std::cout << "beta_k = " << beta_k << std::endl;
+        std::cout << "denominador diferente de 0 ? " << (beta * (1 - (1 + 1.0/beta) * exp(-1.0/beta))) + 0.00001 << std::endl;
+        gamma = (1 - exp(-1.0/beta)) / (beta * (1 - (1 + 1.0/beta) * exp(-1.0/beta)) + 5e-10);
+        std::cout << beta << ' ' << gamma << std::endl;
+    } while (abs(gamma - gamma_k) > threshold);
+    std::cout << "Got gamma delta as low as " << abs(gamma - gamma_k) << std::endl;
+    return static_cast<ull>(ceil(gamma * info.colisoes));
 }
 
 std::string SlottedAlohaInfo::to_string() {

@@ -46,7 +46,7 @@ ull get_closest_po2(ull n) {
             colisoes += count > 1;
         }
         ull vazios = (current_frame - success - colisoes);
-        auto info = SlottedAlohaInfo(success, colisoes, vazios);
+        auto info = SlottedAlohaInfo(success, colisoes, vazios, current_frame);
         history.push_back(info);
         auto t0 = std::chrono::high_resolution_clock::now();
         ull next_frames = estimator.next_frames(info);
@@ -64,6 +64,7 @@ ull get_closest_po2(ull n) {
         } else {
             current_frame = next_frames;
         }
+        cout << "current_frame = " << current_frame << endl;
         frames.clear();
     }
      return result;
