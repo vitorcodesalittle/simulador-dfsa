@@ -3,7 +3,7 @@ cmake -S ./simulador -B ./build
 cd build; make; cd ..;
 cp build/simulador ./sim
 echo 'Running simulator'
-./sim --out plots/out 
+./sim --out plots/out --repetitions 1000
 cd plots/
 mkdir -p images
 echo 'Generating scripts'

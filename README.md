@@ -1,10 +1,18 @@
 Esse é um simulador para avaliação de desempenho de estimadores DFSA para cadeira de Sistemas de Comunicação
 
 ## Todos:
-- [ ] Implementar quadros com potência de 2
-- [ ] Implementar Shoute, Eom-Lee, IV2
+- [ ] Colocar grid nos gráficos
+- [ ] Checar implementação do Eom-Lee
+- [ ] Implementar IV2
 
 ## Easy run:
+Se estiver em um linux, usar [run-full.sh](./run-full.sh) **da pasta raiz do projeto**
+```bash
+git clone <url desse repo>
+cd simulador-dfsa
+sh run-full.sh
+```
+
 ```bash
 # se o executável gerado pelo cmake estiver na raiz do projeto:
 simulador --out plots/out && python plots/main.py plots/out.csv plots/images

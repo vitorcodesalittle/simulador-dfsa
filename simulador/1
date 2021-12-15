@@ -16,7 +16,7 @@ Estimator* create_estimator(const string &estimatorName) {
     } else if (estimatorName == "eom-lee") {
         return new EomLeeEstimator();
     } else if (estimatorName == "iv2") {
-        cerr << endl << "IV2 NOT IMPLEMENTED. CONTINUING" << endl;
+        cerr << "IV2 NOT IMPLEMENTED. CONTINUING" << endl;
         return NULL;
     }
 }
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
         }
     }
     string path = c.output_path;
-    cout << endl <<  "Finished. Saving results at " << path + ".csv" << endl;
+    cout << endl <<  "Finished. Saving files at " << path + ".csv" << endl;
     save_csv(path, results);
 
     return 0;

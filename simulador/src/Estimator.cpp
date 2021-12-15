@@ -22,7 +22,7 @@ double abs(double k) {
 }
 
 ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
-    double threshold = 0.5;
+    double threshold = 5e-5;
     double L = static_cast<double>(info.used_frame);
     double gamma_k, gamma = 2, beta = std::numeric_limits<double>::max();
     do {
