@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     ExperimentConfig c = ExperimentConfig::parse(argc, argv);
     cout << c.to_string() << endl;
     map<pair<int, string>, Result> results;
+    int t = c.estimators.size() * (c.max_tags-c.initial_tags) / c.tag_increment * c.repetitions, i = 0;
     for (const string& estimatorName : c.estimators) {
         Estimator *e;
         e = create_estimator(estimatorName);
@@ -53,12 +54,18 @@ int main(int argc, char **argv) {
                 Simulator s = Simulator(c.initial_frame, *e, !c.no_power_of_2);
                 Result result = s.run(ntags);
                 total += result;
+                if (i % 100 == 0){
+                    cout.flush();
+                    cout << '\r' << "Progresso:" <<  (double) i*100/t << " %";
+                }
+                i++;
             }
             total = total / c.repetitions;
             results[make_pair(ntags, estimatorName)] = total;
         }
     }
     string path = c.output_path;
+    cout << "Finished. Saving files at " << path + ".csv" << endl;
     save_csv(path, results);
 
     return 0;

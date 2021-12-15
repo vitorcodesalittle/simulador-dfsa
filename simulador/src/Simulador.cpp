@@ -64,7 +64,6 @@ ull get_closest_po2(ull n) {
         } else {
             current_frame = next_frames;
         }
-        cout << "current_frame = " << current_frame << endl;
         frames.clear();
     }
      return result;
