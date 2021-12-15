@@ -12,6 +12,7 @@ git clone <url desse repo>
 cd simulador-dfsa
 sh run-full.sh
 ```
+ou então
 
 ```bash
 # se o executável gerado pelo cmake estiver na raiz do projeto:
