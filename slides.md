@@ -1,18 +1,22 @@
 ---
 marp: true
 author: vitor, daniel
+theme: lead
+class:
+- gaia
+- invert
 ---
 # Simulador DFSA
 
 ## Integrantes
+- Daniel Henrique
 - Vitor Maia
-- Daniel
 
 ---
 
 ## Detalhes de implementação
 - Foi escolhido a linguagem C++ para escrever o simulador
-- Os gráficos foram gerados em python
+- Os gráficos foram gerados com [pyplot](https://matplotlib.org/)
 - O código está disponível em <https://github.com/vitorcodesalittle/simulador-dfsa>
 
 ---
@@ -33,23 +37,23 @@ $$
 
 - Eom-Lee:
 $$
-\beta_k = \frac{L}{\gamma{k-1}s_c + s_s}
+\beta_k = \frac{L}{\gamma_{k-1}s_c + s_s}
 $$
-
+  
 $$
 \gamma_k =  \frac{1 - \exp(-\frac{1}{\beta_k})}{\beta_k (1 - (1 + \frac{1}{\beta_k)})  \exp(-\frac{1}{\beta_k}))}
 $$
 
-enquanto $|\gamma_k - \gamma_{k-1}| < \epsilon$ e usamos $\epsilon = 5$
+enquanto $|\gamma_k - \gamma_{k-1}| < \epsilon$ e usamos $\epsilon = 5$. $\hat{f} = \gamma* . s_c$
 
 ---
 
 - IV2
-Se o número de colisões for diferente do tamanho do quadro ($s_c < L$), usamos o vogt, isto é, buscamos um $n$ que minimize:
+Se o número de colisões for diferente do tamanho do quadro ($s_c \ne L$), usamos o vogt, isto é, buscamos um $n$ que minimize:
 $$
 \epsilon = ||(a^L_{0, n}, a^L_{1, n}, a^L_{r_{i>=2}, n}) - (s_v, s_s, s_c)||
 $$
-Caso contrário, segue o código:
+Caso contrário, usamos as seguintes aproximações:
  
 ```c++
     if (L <= 64) s = 100;
@@ -77,10 +81,22 @@ Onde `L` é o tamanho de quadros, `s` é o fator multiplicativo $\delta$
 ```
 
 
-Como ententendemos que $\delta$ é uma constante ajustável que melhora dependendo da quantidade média de tags em várias leituras, usamos um \delta que varia de acordo com $L$.
+Como entendemos que $\delta$ é uma constante ajustável que melhora dependendo da quantidade média de tags em várias leituras, usamos um $\delta$ que varia de acordo com $L$
 
-Implementamos a estimatima de tags $\hat{n}$, apenas para os valores possívels de $\delta$ ($10²$, $10³$ e $10⁴$)
+Calculamos a estimatima de tags $\hat{n}$ apenas para os valores possívels de $\delta$ em nossa implementação($10²$, $10³$ e $10⁴$)
 
+Quando caímos no caso $L \ne s_c$ e calculamos a estimativa do vogt, usamos uma busca binária para o valor de $\hat{n}$, o que pareceu tornar o algoritmo como um todo mais lento (pode ser encontrada ao fim do slide).
+
+---
+
+### Configurações de experimentos:
+- Quadros limitados a potência de 2
+- Quadros sem limites de tamanho
+
+### Para todos os experimentos:
+- Tamanho do quadro inicial: 64
+- Número de repetições 1000
+- Número de tags = 100, 200, ..., 1000
 ---
 
 ## Comparando o *número total de slots*
@@ -130,9 +146,33 @@ Implementamos a estimatima de tags $\hat{n}$, apenas para os valores possívels 
 
 ---
 
+## Busca binária no vogt
+
+<!-- para essa busca funcionar, a função para cálculo de epsilon em função de n
+deve ser monotônica. -->
+
+```c++
+
+ull next_frames_vogt(SlottedAlohaInfo &info) {
+    double high = 3e3, low = 2;
+    double threshold = 1;
+    while (high - low > threshold) {
+        double nhigh = calc_epsilon(info , high);
+        double nlow = calc_epsilon(info, low);
+        double m = (high - low) / 2;
+        if (nhigh < nlow) low = low + m;
+        else high = high - m;
+    }
+    return static_cast<ull>(ceil(high));
+}
+```
+
+---
+
 ## Fim
 
 #### Obrigado pela atenção
 
 
 ---
+
