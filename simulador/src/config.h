@@ -23,7 +23,7 @@ public:
         tag_increment = 100;
         no_power_of_2 = false;
         output_path = "results";
-        estimators = std::vector<std::string> {"lb", "shoute", "eom-lee", "iv2"};
+        estimators = std::vector<std::string> {"lb","iv2", "shoute", "eom-lee"};
     }
 
     std::string to_string();

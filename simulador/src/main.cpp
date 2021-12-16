@@ -16,8 +16,7 @@ Estimator* create_estimator(const string &estimatorName) {
     } else if (estimatorName == "eom-lee") {
         return new EomLeeEstimator();
     } else if (estimatorName == "iv2") {
-        cerr << endl << "IV2 NOT IMPLEMENTED. CONTINUING" << endl;
-        return NULL;
+        return new IV2Estimator();
     }
 }
 
