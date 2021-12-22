@@ -17,6 +17,8 @@ Estimator* create_estimator(const string &estimatorName, const ExperimentConfig 
         return new EomLeeEstimator();
     } else if (estimatorName == "iv2") {
         return new IV2Estimator(c.initial_frame);
+    } else {
+      return nullptr;
     }
 }
 
@@ -48,39 +50,33 @@ long get_seed() {
     return duration;
 }
 
-
-
 int main(int argc, char **argv) {
     ExperimentConfig c = ExperimentConfig::parse(argc, argv);
-        // srand(time(NULL));
     cout << c.to_string() << endl;
     map<pair<int, string>, Result> results;
     int t = c.estimators.size() * c.repetitions * (c.max_tags-c.initial_tags+ c.tag_increment - 1) / c.tag_increment, i = 0;
+    // srand(get_seed());
     for (const string& estimatorName : c.estimators) {
-        Estimator *e;
-        e = create_estimator(estimatorName, c);
-        if (e == nullptr) continue;
+        Estimator *e = create_estimator(estimatorName, c);
         for (int ntags = c.initial_tags;  ntags <= c.max_tags; ntags += c.tag_increment) {
             Result total{};
-            long last = get_seed();
+            Simulator(c.initial_frame, *e, !c.no_power_of_2).run(ntags); // warm
+            Simulator(c.initial_frame, *e, !c.no_power_of_2).run(ntags); //  up
             for (int r = 0; r < c.repetitions; r++) {
                 Simulator s = Simulator(c.initial_frame, *e, !c.no_power_of_2);
-                srand(last);
+                srand(get_seed());
                 Result result = s.run(ntags);
-                auto new_seed = get_seed();
-                if (new_seed == last) {
-                    cerr << "SAME SEED AGAIN\n";
-                    return 1;
-                } else last = new_seed;
-
+								// cout << "TOTAL BEFORE: " << total.to_string() << endl;
                 total += result;
-                if (i % 100 == 0){
+								// cout << "TOTAL AFTER: " << total.to_string() << endl;
+                if (++i % 100 == 0){
                     cout.flush();
-                    cout << '\r' << "Progresso:" <<  (double) i*100/t << " %";
+                    cout << '\r' <<  (double) i*100/t << " %" << " of the total simulations. Benchmarking " << estimatorName;
                 }
-                i++;
             }
+						// cout << "TOTAL BFORE: " << total.to_string() << endl;
             total = total / c.repetitions;
+						// cout << "TOTAL AFTER: " << total.to_string() << endl;
             results[make_pair(ntags, estimatorName)] = total;
         }
     }
