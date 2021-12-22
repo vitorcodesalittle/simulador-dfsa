@@ -2,8 +2,8 @@
 #include<iostream>
 #include "Simulador.h"
 
-int random_frame(ull number_of_frames) {
-    return rand() % number_of_frames;
+int random_slot(ull frame_size) {
+    return rand() % frame_size;
 }
 std::string Result::to_string() const {
     std::string result = "";
@@ -19,9 +19,9 @@ ull get_closest_po2(ull n) {
     if (n <= 5) return 4;
     ull next_power = 2;
     while (next_power < n) {
-        next_power *= 2;
+        next_power << 1;
     }
-    ull last_power = next_power / 2;
+    ull last_power = next_power >> 1;
     if (next_power - n <= n - last_power) return next_power;
     return last_power;
 }
@@ -30,17 +30,17 @@ ull get_closest_po2(ull n) {
     ull nSuccess = 0;
     Result result{};
     while (true) {
-        std::unordered_map<ull, ull> frames;
+        std::unordered_map<ull, ull> slots_counter;
         for (int i = 0; i < ntags - nSuccess; i++) {
-            int f = random_frame(current_frame);
-            if (!frames.count(f)) {
-                frames[f] = 1;
+            int f = random_slot(current_frame);
+            if (!slots_counter.count(f)) {
+                slots_counter[f] = 1;
             } else {
-                frames[f]++;
+                slots_counter[f]++;
             }
         }
         ull success = 0, colisoes = 0;
-        for (auto p : frames) {
+        for (auto p : slots_counter) {
             ull count = p.second;
             success += count == 1;
             colisoes += count > 1;
@@ -64,7 +64,7 @@ ull get_closest_po2(ull n) {
         } else {
             current_frame = next_frames;
         }
-        frames.clear();
+        slots_counter.clear();
     }
      return result;
 }

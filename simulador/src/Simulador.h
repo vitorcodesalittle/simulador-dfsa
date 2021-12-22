@@ -37,11 +37,11 @@ public:
     bool use_power_of_2;
     ull initial_frame;
     Estimator &estimator;
-    ull current_frame;
+    ull currrent_frame_size;
     std::vector<SlottedAlohaInfo> history;
     Simulator(ull ifs, Estimator &estimator, bool use_power_of_2 = false) : estimator(estimator), initial_frame(ifs), use_power_of_2(use_power_of_2) {
         history = std::vector<SlottedAlohaInfo>();
-        current_frame = initial_frame;
+        currrent_frame_size = initial_frame;
     }
     ~Simulator() = default;
     Result run(ull ntags);
