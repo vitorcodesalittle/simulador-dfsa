@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Estimator* create_estimator(const string &estimatorName) {
+Estimator* create_estimator(const string &estimatorName, const ExperimentConfig &c) {
     if (estimatorName == "lb") {
         return new LowerBoundEstimator();
     } else if (estimatorName == "shoute")  {
@@ -16,7 +16,7 @@ Estimator* create_estimator(const string &estimatorName) {
     } else if (estimatorName == "eom-lee") {
         return new EomLeeEstimator();
     } else if (estimatorName == "iv2") {
-        return new IV2Estimator();
+        return new IV2Estimator(c.initial_frame);
     }
 }
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     int t = c.estimators.size() * c.repetitions * (c.max_tags-c.initial_tags+ c.tag_increment - 1) / c.tag_increment, i = 0;
     for (const string& estimatorName : c.estimators) {
         Estimator *e;
-        e = create_estimator(estimatorName);
+        e = create_estimator(estimatorName, c);
         if (e == nullptr) continue;
         for (int ntags = c.initial_tags;  ntags <= c.max_tags; ntags += c.tag_increment) {
             Result total{};

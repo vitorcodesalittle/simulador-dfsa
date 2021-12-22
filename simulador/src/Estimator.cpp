@@ -78,8 +78,7 @@ ull IV2Estimator::next_frames(SlottedAlohaInfo &info) {
         return next_frames_vogt(info);
     }
     double s;
-    if (info.used_frame <= 64) s = 100;
-    else if (info.used_frame > 64 && info.used_frame < 128) s = 1000;
+    if (initial_frame_size <= 64) s = 100;
     else s = 10000;
     double n;
     if (s == 100) n = 6.851851850 * (info.used_frame - 1) +  2;
