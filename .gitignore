@@ -3,3 +3,5 @@
 simulador/cmake-build-debug
 sim
 build/
+*.swo
+*.swp

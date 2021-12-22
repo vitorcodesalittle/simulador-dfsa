@@ -3,9 +3,6 @@ Esse é um simulador para avaliação de desempenho de estimadores DFSA para cad
 ## Requisitos para rodar esse programa:
 - CMake, python3
 
-## Todos:
-- [ ] Implementar IV2
-
 ## Easy run:
 Se estiver em um linux, usar [run-full.sh](./run-full.sh) **da pasta raiz do projeto**
 ```bash
@@ -19,6 +16,23 @@ ou então
 # se o executável gerado pelo cmake estiver na raiz do projeto:
 simulador --out plots/out && python plots/main.py plots/out.csv plots/images
 ```
+
+## Slotted Aloha
+Algoritmo de resolução de conflitos para leitura de RFIDs
+
+## FSA (Framed Slotted Aloha)
+1. Leitor manda um comando request para as tags, informando o tamanho do frame
+2. As tags escolhem um frame aleatório para emitir seus dados. Caso a tag dê a sorte de ser a única a ter escolhido um frame, então a leitura dessa tag é bem sucedida e ela não responde nos frames seguintes. Caso duas tags mandem no mesmo frame, então houve uma colisão, e elas terão que repetir o processo no frame seguinte.
+3. Esse processo se repete até todas as tags serem lidas (ou seja, quando não há colisões)
+
+## DFSA (Dynamic Framed Slotted Aloha)
+Parecido com o FSA, mas o tamanho do frame é dinamicamente ajustado por algum estimador do número de tags, o que torna o algoritmos mais eficiente
+
+## Estimadores implementados:
+- Lower Bound
+- Shoute
+- Eom-Lee
+- IV2 (Improved Vogt 2)
 
 ## Parâmetros Configuráveis
 
@@ -43,16 +57,7 @@ simulador --out plots/out && python plots/main.py plots/out.csv plots/images
 - Quantidade total de slots em colisão
 - Tempo médio de execução do estimador
 
-## Slotted Aloha
-Algoritmo de resolução de conflitos para leitura de RFIDs
 
-## FSA (Framed Slotted Aloha)
-1. Leitor manda um comando request para as tags, informando o tamanho do frame
-2. As tags escolhem um frame aleatório para emitir seus dados. Caso a tag dê a sorte de ser a única a ter escolhido um frame, então a leitura dessa tag é bem sucedida e ela não responde nos frames seguintes. Caso duas tags mandem no mesmo frame, então houve uma colisão, e elas terão que repetir o processo no frame seguinte.
-3. Esse processo se repete até todas as tags serem lidas (ou seja, quando não há colisões)
-
-## DFSA (Dynamic Framed Slotted Aloha)
-Parecido com o FSA, mas o tamanho do frame é dinamicamente ajustado por algum estimador do número de tags, o que torna o algoritmos mais eficiente
 
 ## Integrantes
 - Vitor Lopes Maia Albuquerque
@@ -60,4 +65,4 @@ Parecido com o FSA, mas o tamanho do frame é dinamicamente ajustado por algum e
 
 ## Referências
 - <http://www.cin.ufpe.br/~pasg/gpublications/AnGo11.pdf>
-- <http://www.cin.ufpe.br/~pasg/gpublications/AnGo11.pdf>
+- <http://www.cin.ufpe.br/~pasg/gpublications/AnGo13.pdf>
