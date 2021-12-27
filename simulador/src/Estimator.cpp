@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 #include "Estimator.h"
 #include "Vec3.h"
+#include "smartfact.hpp"
 
 // Não é usado
 ull Estimator::next_frames(SlottedAlohaInfo &info) {
@@ -16,14 +17,9 @@ ull ShoutEstimator::next_frames(SlottedAlohaInfo &info) {
     return static_cast<ull>(ceil(2.39 * info.colisoes));
 }
 
-double abs(double k) {
-    if (k < 0) return - k;
-    return k;
-}
 
 ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
-
-    double threshold = 5e-5;
+    double threshold = 1e-3;
     double L = static_cast<double>(info.used_frame);
     double gamma_k, gamma = 2, beta = std::numeric_limits<double>::max();
     do {
@@ -34,43 +30,42 @@ ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
     return static_cast<ull>(ceil(gamma * info.colisoes));
 }
 
-double combinations(double n, double k) {
-    if (k > n) return 0;
-    if (k * 2 > n) k = n-k;
-    if (k == 0) return 1;
-    double result = n;
-    for( int i = 2; i <= k; ++i ) {
-        result *= (n-i+1);
-        result /= i;
-    }
-    return result;
+ull IV2Estimator::combinations(ull n, ull k) {
+	if (k > n) return 0;
+	if (k * 2 > n) k = n-k;
+	if (k == 0) return 1;
+	int result = n;
+	for( int i = 2; i <= k; ++i ) {
+		result *= (n-i+1);
+		result /= i;
+	}
+	return result;
 }
 
-double estimate_single(ull L, int r, double n) {
+ull IV2Estimator::estimate(ull L, ull r, ull n) {
     return L * combinations(n, r) * pow(1.0/L, r) * pow(1 - 1.0/L, n-r);
 }
 
-double calc_epsilon(SlottedAlohaInfo &info, double n) {
-    double a0 = estimate_single(info.used_frame, 0, n); // estimativa vazios
-    double a1 = estimate_single(info.used_frame, 1, n); // estimativa sucessos
-    double arest = 0; // estimativas colisões acumulada
+double IV2Estimator::calc_epsilon(SlottedAlohaInfo &info, ull n) {
+    ull a0 = estimate(info.used_frame, 0, n); // estimativa vazios
+    ull a1 = estimate(info.used_frame, 1, n); // estimativa sucessos
+    ull arest = 0; // estimativas colisões acumulada
     for (int r = 2; r <= n; r++) {
-        arest += estimate_single(info.used_frame, r, n);
+        arest += estimate(info.used_frame, r, n);
     }
-    return (Vec3{a0, a1, arest} - Vec3{static_cast<double>(info.vazios), static_cast<double>(info.sucessos), static_cast<double>(info.colisoes)}).len();
+    return (Vec3{a0, a1, arest} - Vec3{info.vazios, info.sucessos, info.colisoes}).len();
 }
 
-ull next_frames_vogt(SlottedAlohaInfo &info) {
+ull IV2Estimator::next_frames_vogt(SlottedAlohaInfo &info) {
     double high = 3e3, low = 2;
-    double threshold = 5e-5;
-    while (high - low > threshold) {
+    while (high - low > 1) {
         double nhigh = calc_epsilon(info , high);
         double nlow = calc_epsilon(info, low);
         double m = (high - low) / 2;
         if (nhigh < nlow) low = low + m;
         else high = high - m;
     }
-    return static_cast<ull>(ceil(high));
+    return static_cast<ull>(ceil(low));
 }
 
 ull IV2Estimator::next_frames(SlottedAlohaInfo &info) {
