@@ -18,7 +18,8 @@ Estimator* create_estimator(const string &estimatorName, const ExperimentConfig 
     } else if (estimatorName == "iv2") {
         return new IV2Estimator(c.initial_frame);
     } else {
-      return nullptr;
+        std::cerr<<"Not implemented: " << estimatorName << std::endl;
+        exit(1);
     }
 }
 

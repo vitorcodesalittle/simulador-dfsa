@@ -29,11 +29,25 @@ $$
 \hat{f} = 2 * n
 $$
 
+```cpp
+ull LowerBoundEstimator::next_frames(SlottedAlohaInfo &info) {
+    return info.colisoes * 2;
+}
+```
+
+---
+
 - Shoute:
 
 $$
 \hat{f} = 2.39 * n
 $$
+
+```cpp
+ull ShoutEstimator::next_frames(SlottedAlohaInfo &info) {
+    return static_cast<ull>(ceil(2.39 * info.colisoes));
+}
+```
 
 - Eom-Lee:
 $$
@@ -45,6 +59,21 @@ $$
 $$
 
 enquanto $|\gamma_k - \gamma_{k-1}| < \epsilon$ e usamos $\epsilon = 5$. $\hat{f} = \gamma* . s_c$
+
+
+```cpp
+ull EomLeeEstimator::next_frames(SlottedAlohaInfo &info) {
+    double threshold = 5e-5;
+    double L = static_cast<double>(info.used_frame);
+    double gamma_k, gamma = 2, beta = std::numeric_limits<double>::max();
+    do {
+        gamma_k = gamma;
+        beta = L / ((gamma_k * info.colisoes) + info.sucessos);
+        gamma = (1 - exp(-1.0/beta)) / (beta * (1 - (1 + 1.0/beta) * exp(-1.0/beta)));
+    } while (abs(gamma - gamma_k) > threshold);
+    return static_cast<ull>(ceil(gamma * info.colisoes));
+}
+```
 
 ---
 
