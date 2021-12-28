@@ -3,7 +3,6 @@
 #include <bits/stdc++.h>
 #include "Estimator.h"
 #include "Vec3.h"
-#include "smartfact.hpp"
 
 // Não é usado
 ull Estimator::next_frames(SlottedAlohaInfo &info) {
