@@ -21,6 +21,56 @@ class:
 
 ---
 
+**Código do simulador (1/2)**
+
+```cpp
+ Result Simulator::run(ull ntags) {
+    ull nSuccess = 0;
+    Result result{};
+    while (true) {
+        std::unordered_map<ull, ull> slots_counter;
+        for (int i = 0; i < ntags - nSuccess; i++) {
+            int f = random_slot(current_frame_size);
+            if (!slots_counter.count(f)) {
+                slots_counter[f] = 1;
+            } else {
+                slots_counter[f]++;
+            }
+        }
+```
+---
+**Código do simulador (2/2)**
+```cpp
+        ull success = 0, colisoes = 0;
+        for (auto p : slots_counter) {
+            ull count = p.second;
+            success += count == 1;
+            colisoes += count > 1;
+        }
+        ull vazios = (current_frame_size - success - colisoes);
+        auto info = SlottedAlohaInfo(success, colisoes, vazios, current_frame_size);
+        auto t0 = std::chrono::high_resolution_clock::now();
+        ull next_frames = estimator.next_frames(info);
+        long long ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - t0).count();
+        result.total_collision_slots += colisoes;
+        result.total_empty_slots += vazios;
+        result.total_slots += current_frame_size;
+        result.time += ns;
+        if (info.colisoes == 0) {
+            break;
+        }
+        nSuccess += success;
+        if (use_power_of_2) {
+            current_frame_size = get_closest_po2(next_frames);
+        } else {
+            current_frame_size = next_frames;
+        }
+        slots_counter.clear();
+    }
+     return result;
+}
+```
+---
 ## Estimadores
 
 - Lower-Bound:
@@ -132,83 +182,69 @@ ull IV2Estimator::next_frames_vogt(SlottedAlohaInfo &info) {
 
 ---
 
-### Configurações de experimentos:
+- O fato de fazermos uma busca pelo $n$ que minimiza $\epsilon$ torna essa
+implementação muito lenta
+
+---
+#### Configurações de experimentos:
 - Quadros limitados a potência de 2
 - Quadros sem limites de tamanho
-
-### Para todos os experimentos:
+#### Para todos os experimentos:
 - Tamanho do quadro inicial: 64
-- Número de repetições 1000
+- Número de repetições 2000
 - Número de tags = 100, 200, ..., 1000
----
-
-## Comparando o *número total de slots*
-![w:500](./plots/images/total_slots.png) ![w:500](./comparation/total_slots.png)
-
----
-
-## Comparando o *número total de slots vazios*
-
-![w:500](./plots/images/total_empty_slots.png) ![w:500](./comparation/total_empty_slots.png)
+#### Comparativos
+- Frames limitados a $2^Q$ com resultados do [artigo](https://www.cin.ufpe.br/~pasg/gpublications/AnGo11.pdf) (Seção 3)
+  - Total de slots, slots com colisão, slots vazios
+- Frames limitados a $2^Q$ x Frames sem limites
+  - Total de slots, slots com colisão, slots vazios, tempo de execução
 
 ---
 
-## Comparando o *número total de slots em colisão*
+#### Comparando o *número total de slots* com frames limitados a $2^Q$
 
-![w:500](./plots/images/total_collisions.png) ![w:500](./comparation/total_collision_slots.png)
-
----
-
-## Comparando o *tempo médio de execução*
-
-![w:500](./plots/images/total_time.png)
+![h:400](./plots/images-po2/total_slots.png) ![h:400](./comparation/total_slots.png)
 
 ---
 
-## Comparando o *número total de slots* com frames limitados a $2^Q$
+#### Comparando o *número total de slots vazios*  com frames limitados a $2^Q$
 
-![w:500](./plots/images-po2/total_slots.png) ![w:500](./comparation/total_slots.png)
-
----
-
-## Comparando o *número total de slots vazios*  com frames limitados a $2^Q$
-
-![w:500](./plots/images-po2/total_empty_slots.png) ![w:500](./comparation/total_empty_slots.png)
+![h:400](./plots/images-po2/total_empty_slots.png) ![h:400](./comparation/total_empty_slots.png)
 
 ---
 
-## Comparando o *número total de slots em colisão* com frames limitados a $2^Q$
+#### Comparando o *número total de slots em colisão* com frames limitados a $2^Q$
 
-![w:500](./plots/images-po2/total_collisions.png) ![w:500](./comparation/total_collision_slots.png)
-
----
-
-## Comparando o *tempo médio de execução* com frames limitados a $2^Q$
-
-![w:500](./plots/images-po2/total_time.png)
+![h:400](./plots/images-po2/total_collisions.png) ![h:400](./comparation/total_collision_slots.png)
 
 ---
 
-## Busca binária no vogt
+### Comparando o efeito de limitar o tamanho do quadro a potências de 2
 
-<!-- para essa busca funcionar, a função para cálculo de epsilon em função de n
-deve ser monotônica. -->
+À esquerda temos sem o limite, e a direita com o limite
 
-```c++
+---
 
-ull next_frames_vogt(SlottedAlohaInfo &info) {
-    double high = 3e3, low = 2;
-    double threshold = 1;
-    while (high - low > threshold) {
-        double nhigh = calc_epsilon(info , high);
-        double nlow = calc_epsilon(info, low);
-        double m = (high - low) / 2;
-        if (nhigh < nlow) low = low + m;
-        else high = high - m;
-    }
-    return static_cast<ull>(ceil(high));
-}
-```
+#### Comparando o *número total de slots*
+![h:400](./plots/images/total_slots.png) ![h:400](./plots/images-po2/total_slots.png)
+
+---
+
+#### Comparando o *número total de slots vazios*
+
+![h:400](./plots/images/total_empty_slots.png) ![h:400](./plots/images-po2/total_empty_slots.png)
+
+---
+
+#### Comparando o *número total de slots em colisão*
+
+![h:400](./plots/images/total_collisions.png) ![h:400](./plots/images-po2/total_collisions.png)
+
+---
+
+#### Comparando o *tempo médio de execução*
+
+![h:400](./plots/images/total_time.png) ![h:400](./plots/images-po2/total_time.png)
 
 ---
 
